@@ -549,11 +549,9 @@
             <!-- Results Container -->
             <div class="result-container glass-card p-4 p-md-5" id="result-container">
                 <div id="tiktok-result">
-                    <!-- TikTok result will be loaded here -->
                 </div>
                 
                 <div id="instagram-result" style="display: none;">
-                    <!-- Instagram result will be loaded here -->
                 </div>
             </div>
         </div>
@@ -565,7 +563,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elements
             const platformTabs = document.querySelectorAll('.platform-tab');
             const tiktokForm = document.getElementById('tiktok-form');
             const instagramForm = document.getElementById('instagram-form');
@@ -577,20 +574,16 @@
             const tiktokUrlInput = document.getElementById('tiktok-url');
             const instagramUrlInput = document.getElementById('instagram-url');
             
-            // Set active platform
             let activePlatform = 'tiktok';
-            
-            // Platform tab switching
+           
             platformTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
+       
                     platformTabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
+                   
                     this.classList.add('active');
                     activePlatform = this.dataset.platform;
                     
-                    // Show the correct form
                     if (activePlatform === 'tiktok') {
                         tiktokForm.style.display = 'block';
                         instagramForm.style.display = 'none';
@@ -605,12 +598,11 @@
                         instagramUrlInput.focus();
                     }
                     
-                    // Hide result container when switching platforms
                     resultContainer.style.display = 'none';
                 });
             });
             
-            // TikTok Download Button
+           
             tiktokDownloadBtn.addEventListener('click', function() {
                 const url = tiktokUrlInput.value.trim();
                 
@@ -619,21 +611,21 @@
                     return;
                 }
                 
-                // Validate TikTok URL
+             
                 if (!isValidTikTokUrl(url)) {
                     showAlert('danger', 'URL TikTok tidak valid. Pastikan URL berasal dari TikTok.');
                     return;
                 }
                 
-                // Show loading state
+          
                 tiktokDownloadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Memproses...';
                 tiktokDownloadBtn.disabled = true;
                 
-                // Call the API
+            
                 fetchTikTokVideoData(url);
             });
             
-            // Instagram Download Button
+      
             instagramDownloadBtn.addEventListener('click', function() {
                 const url = instagramUrlInput.value.trim();
                 
@@ -642,17 +634,17 @@
                     return;
                 }
                 
-                // Validate Instagram URL
+             
                 if (!isValidInstagramUrl(url)) {
                     showAlert('danger', 'URL Instagram tidak valid. Pastikan URL berasal dari Instagram.');
                     return;
                 }
                 
-                // Show loading state
+             
                 instagramDownloadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Memproses...';
                 instagramDownloadBtn.disabled = true;
                 
-                // Call the API
+            
                 fetchInstagramData(url);
             });
             
@@ -671,7 +663,6 @@
             function fetchTikTokVideoData(url) {
                 const apiUrl = `https://api.fikmydomainsz.xyz/download/tiktok-v2?url=${encodeURIComponent(url)}`;
                 
-                // Show progress bar during download
                 showProgressBar();
                 
                 fetch(apiUrl)
@@ -689,7 +680,6 @@
                         showAlert('danger', 'Terjadi kesalahan saat memproses video');
                     })
                     .finally(() => {
-                        // Reset button state
                         tiktokDownloadBtn.innerHTML = '<i class="fas fa-download me-2"></i> Download';
                         tiktokDownloadBtn.disabled = false;
                     });
@@ -717,7 +707,6 @@
                         showAlert('danger', 'Terjadi kesalahan saat memproses konten Instagram');
                     })
                     .finally(() => {
-                        // Reset button state
                         instagramDownloadBtn.innerHTML = '<i class="fas fa-download me-2"></i> Download';
                         instagramDownloadBtn.disabled = false;
                     });
@@ -725,7 +714,6 @@
             
             // Display TikTok Data
             function displayTikTokData(videoData) {
-                // Create date string from timestamp
                 const date = new Date(videoData.create_time * 1000);
                 const dateString = date.toLocaleDateString('id-ID', {
                     day: 'numeric',
@@ -733,14 +721,12 @@
                     year: 'numeric'
                 });
                 
-                // Format numbers
                 const formatNumber = num => {
                     if (num >= 1000000) return (num / 1000000).toFixed(1) + ' jt';
                     if (num >= 1000) return (num / 1000).toFixed(1) + ' rb';
                     return num;
                 };
                 
-                // Generate HTML for video info
                 tiktokResult.innerHTML = `
                     <div class="creator-info">
                         <img src="${videoData.author.avatar}" alt="Creator Avatar" class="creator-avatar" onerror="this.src='https://via.placeholder.com/70?text=Avatar'">
@@ -880,7 +866,7 @@
                         </div>  
                 `;
                 
-                // Add event listeners to download buttons
+               
                 document.querySelectorAll('#instagram-result .download-btn:not([disabled])').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const url = this.dataset.url;
@@ -893,15 +879,11 @@
                 resultContainer.style.display = 'block';
             }
             
-            // Download file function with progress
             function downloadFile(url, filename, buttonElement) {
-                // Show progress bar
                 const progressContainer = buttonElement.nextElementSibling;
                 const progressBar = progressContainer.querySelector('.download-progress-bar');
                 progressContainer.style.display = 'block';
                 progressBar.style.width = '0%';
-                
-                // Disable button during download
                 buttonElement.disabled = true;
                 buttonElement.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Mengunduh...';
                 
@@ -943,13 +925,11 @@
                     })
                     .then(response => response.blob())
                     .then(blob => {
-                        // Create download link
                         const a = document.createElement('a');
                         a.style.display = 'none';
                         a.href = URL.createObjectURL(blob);
                         a.download = filename;
-                        
-                        // Append to the body, click and remove
+                       
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
@@ -1022,7 +1002,6 @@
             
             // Show alert message
             function showAlert(type, message) {
-                // Remove existing alerts
                 const existingAlert = document.querySelector('.alert-dismissible');
                 if (existingAlert) existingAlert.remove();
                 
